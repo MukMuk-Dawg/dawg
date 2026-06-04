@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Sip & Chill</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --black:#111;
+    --beige:#F5F0E8;
+    --accent:#C8B6A6;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:var(--beige);
+    padding:20px;
+}
+
+/* NAV */
+nav{
+    background:var(--black);
+    padding:18px 8%;
+    color:var(--beige);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+nav a{
+    color:var(--beige);
+    text-decoration:none;
+    font-weight:500;
+}
+
+/* HEADER */
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+/* CART ITEMS */
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    margin:10px 0;
+    padding:15px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 3px 8px rgba(0,0,0,.1);
+    font-weight:500;
+}
+
+/* TOTAL */
+.total{
+    margin-top:20px;
+    font-weight:bold;
+    text-align:right;
+    font-size:20px;
+}
+
+/* BUTTON GROUP WRAPPER */
+.button-group{
+    margin-top:25px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+/* PRIMARY BUTTON (Place Order) */
+.btn{
+    width:100%;
+    padding:10px 14px;
+    background:var(--black);
+    color:var(--beige);
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:500;
+    text-align:center;
+    transition:0.2s ease;
+}
+
+.btn:hover{
+    opacity:0.9;
+}
+
+.btn:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+}
+
+/* SECONDARY BUTTON (Return to Menu) */
+.btn-secondary {
+    display:none;
+    width:100%;
+    padding:10px 14px;
+    background:transparent;
+    color:var(--black);
+    border:2px solid var(--black);
+    border-radius:14px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    text-align:center;
+    transition:0.2s ease;
+}
+
+.btn-secondary:hover{
+    background:var(--black);
+    color:var(--beige);
+}
+
+/* NOTIFICATION */
+#notification{
+    display:none;
+    text-align:center;
+    margin-top:15px;
+    padding:12px;
+    background:var(--accent);
+    border-radius:10px;
+    font-weight:600;
+    font-size:15px;
+}
+
+/* RECEIPT MODAL */
+#receiptModal{
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+#receiptContent{
+    background: #fff;
+    border-radius:12px;
+    padding:20px;
+    width:90%;
+    max-width:400px;
+    box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
+
+#receiptContent h2{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+#receiptContent .receipt-item{
+    display:flex;
+    justify-content:space-between;
+    margin:5px 0;
+    font-weight:500;
+}
+
+#receiptContent .receipt-total{
+    margin-top:15px;
+    font-weight:bold;
+    font-size:18px;
+    text-align:right;
+}
+
+#receiptContent button{
+    margin-top:20px;
+    width:100%;
+    padding:10px;
+    background:var(--black);
+    color:var(--beige);
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:500;
+    font-size:15px;
+}
+#receiptContent button:hover{
+    opacity:0.9;
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div>Sip & Chill 🧋</div>
+    <a href="menu.html">← Back to Menu</a>
+</nav>
+
+<h1>Checkout</h1>
+
+<div id="cartContainer"></div>
+
+<div class="total" id="total">Total: ₱0</div>
+
+<div class="button-group">
+    <button class="btn" onclick="checkout()">Place Order</button>
+    <div id="notification">✅ Your order is being prepared!</div>
+    <a href="menu.html" id="backToMenuBtn" class="btn-secondary">Return to Menu</a>
+</div>
+
+<!-- RECEIPT MODAL -->
+<div id="receiptModal">
+    <div id="receiptContent">
+        <h2>🧾 Your Receipt</h2>
+        <div id="receiptItems"></div>
+        <div class="receipt-total" id="receiptTotal"></div>
+        <button onclick="closeReceipt()">Close</button>
+    </div>
+</div>
+
+<script>
+function getCart(){
+    return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+function renderCart(){
+    const cart = getCart();
+    const container = document.getElementById("cartContainer");
+    let total = 0;
+    container.innerHTML = "";
+
+    if(cart.length === 0){
+        container.innerHTML = "<p style='text-align:center;margin:20px 0;font-weight:bold;'>Your cart is empty!</p>";
+    }
+
+    cart.forEach(item=>{
+        total += item.price * item.qty;
+        container.innerHTML += `
+        <div class="cart-item">
+            <div>${item.name} x ${item.qty}</div>
+            <div>₱${item.price * item.qty}</div>
+        </div>`;
+    });
+
+    document.getElementById("total").innerText = "Total: ₱" + total;
+}
+
+function checkout(){
+    const cart = getCart();
+
+    if(cart.length === 0){
+        alert("Your cart is empty!");
+        return;
+    }
+
+    // Show notification and return button
+    document.getElementById("notification").style.display = "block";
+    document.getElementById("backToMenuBtn").style.display = "block";
+
+    // Show receipt
+    showReceipt(cart);
+
+    // Clear cart
+    localStorage.removeItem("cart");
+
+    // Disable order button
+    const btn = document.querySelector(".btn");
+    btn.disabled = true;
+    btn.textContent = "Order Placed";
+
+    // Clear cart display
+    document.getElementById("cartContainer").innerHTML = "";
+    document.getElementById("total").innerText = "Total: ₱0";
+}
+
+function showReceipt(cart){
+    const modal = document.getElementById("receiptModal");
+    const itemsContainer = document.getElementById("receiptItems");
+    const totalContainer = document.getElementById("receiptTotal");
+
+    itemsContainer.innerHTML = "";
+    let total = 0;
+
+    cart.forEach(item=>{
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+        const div = document.createElement("div");
+        div.className = "receipt-item";
+        div.innerHTML = `<span>${item.name} x ${item.qty}</span><span>₱${subtotal}</span>`;
+        itemsContainer.appendChild(div);
+    });
+
+    totalContainer.innerText = "Total: ₱" + total;
+
+    modal.style.display = "flex";
+}
+
+function closeReceipt(){
+    document.getElementById("receiptModal").style.display = "none";
+}
+
+renderCart();
+</script>
+
+</body>
+</html

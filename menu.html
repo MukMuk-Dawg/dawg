@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sip & Chill Menu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --black:#111;
+    --beige:#F5F0E8;
+    --accent:#C8B6A6;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:var(--beige);
+}
+
+/* NAV */
+nav{
+    background:var(--black);
+    padding:18px 8%;
+    color:var(--beige);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+nav a{
+    color:var(--beige);
+    text-decoration:none;
+}
+
+/* HEADER */
+.header{
+    text-align:center;
+    padding:50px 20px;
+}
+
+.header h1{
+    font-size:42px;
+}
+
+/* MENU GRID */
+.container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    padding:40px 8%;
+}
+
+/* CARD */
+.card{
+    background:#fff;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    text-align:center;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-bottom:10px;
+}
+
+.card h3{
+    margin-bottom:8px;
+}
+
+.price{
+    font-weight:bold;
+    color:var(--black);
+}
+
+.btn{
+    margin-top:10px;
+    display:inline-block;
+    padding:10px 15px;
+    background:var(--black);
+    color:var(--beige);
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+/* SECTION TITLE */
+.section-title{
+    padding:0 8%;
+    margin-top:40px;
+    font-size:26px;
+}
+
+/* CART */
+.cart{
+    position:fixed;
+    right:-350px;
+    top:0;
+    width:320px;
+    height:100%;
+    background:#fff;
+    box-shadow:-5px 0 15px rgba(0,0,0,.2);
+    padding:15px;
+    transition:.3s;
+    z-index:999;
+}
+
+.cart.active{ right:0; }
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.4);
+    display:none;
+    z-index:998;
+}
+
+.overlay.active{ display:block; }
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:10px 0;
+}
+
+.qty{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.qty button{
+    width:25px;
+    height:25px;
+    border:none;
+    background:#111;
+    color:#fff;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.total{
+    margin-top:15px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div>Sip & Chill Dawg ☕</div>
+    <a href="index.html">← Back Home</a>
+</nav>
+
+<div class="header">
+    <h1>Our Menu</h1>
+    <p>Fresh Drinks, Desserts & Foods</p>
+</div>
+
+<!-- DRINKS -->
+<h2 class="section-title">🥤 Drinks</h2>
+<div class="container">
+
+    <div class="card">
+        <img src="https://i.pinimg.com/736x/5e/93/29/5e9329c7b9e5e6f1fb7c419e4010c368.jpg" alt="Milk Tea">
+        <h3>Classic Milk Tea</h3>
+        <p class="price">₱49</p>
+        <button class="btn" onclick="add('Classic Milk Tea',49)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/736x/08/ac/a6/08aca67cdac5b3e1ee701b896ea7a0e7.jpg" alt="Brown Sugar Milk Tea">
+        <h3>Brown Sugar Milk Tea</h3>
+        <p class="price">₱59</p>
+        <button class="btn" onclick="add('Brown Sugar Milk Tea',59)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/1200x/75/c4/5e/75c45e402c275d578b7ba7c3dd2dc283.jpg" alt="Iced Coffee">
+        <h3>Iced Coffee</h3>
+        <p class="price">₱45</p>
+        <button class="btn" onclick="add('Iced Coffee',45)">Add to Cart</button>
+    </div>
+    
+    <div class="card">
+        <img src="https://i.pinimg.com/1200x/32/4c/a7/324ca7e20170a9f34b41e3d2a5fc74b1.jpg" alt="Mango Smoothie">
+        <h3>Mango Smoothie</h3>
+        <p class="price">₱65</p>
+        <button class="btn" onclick="add('Mango Smoothie',65)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/1200x/22/32/e8/2232e8df771e1b19349a223b2cae30ac.jpg" alt="Water">
+        <h3>Mineral Water</h3>
+        <p class="price">₱20</p>
+        <button class="btn" onclick="add('Mineral Water',20)">Add to Cart</button>
+    </div>
+
+</div>
+
+<!-- DESSERTS -->
+<h2 class="section-title">🍰 Desserts</h2>
+<div class="container">
+
+    <div class="card">
+        <img src="https://i.pinimg.com/1200x/33/24/ea/3324ea27478420f7a7431489424c8f9a.jpg" alt="Chocolate Cake">
+        <h3>Chocolate Cake</h3>
+        <p class="price">₱70</p>
+        <button class="btn" onclick="add('Chocolate Cake',70)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/736x/68/ca/1f/68ca1f8e34d9c3152c55179528d850f7.jpg" alt="Cheesecake">
+        <h3>Cheesecake</h3>
+        <p class="price">₱75</p>
+        <button class="btn" onclick="add('Cheesecake',75)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/1200x/a8/b3/fb/a8b3fb5010197eecd0a9b94ba90434fd.jpg" alt="Ice Cream Sundae">
+        <h3>Ice Cream Sundae</h3>
+        <p class="price">₱60</p>
+        <button class="btn" onclick="add('Ice Cream Sundae',60)">Add to Cart</button>
+    </div>
+
+</div>
+
+<!-- FOODS -->
+<h2 class="section-title">🍔 Foods</h2>
+<div class="container">
+
+    <div class="card">
+        <img src="https://i.pinimg.com/1200x/e8/95/f2/e895f290df01ee238630e8dd77cab76d.jpg" alt="Burger">
+        <h3>Cheeseburger</h3>
+        <p class="price">₱85</p>
+        <button class="btn" onclick="add('Cheeseburger',85)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/736x/66/de/7f/66de7fc8746f94556369bfaace774aba.jpg" alt="Chicken Sandwich">
+        <h3>Chicken Sandwich</h3>
+        <p class="price">₱90</p>
+        <button class="btn" onclick="add('Chicken Sandwich',90)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/736x/51/30/2e/51302ec5fbd95944281940debf39e79b.jpg" alt="Fries">
+        <h3>Fries</h3>
+        <p class="price">₱50</p>
+        <button class="btn" onclick="add('Fries',50)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/1200x/fc/eb/7b/fceb7b50fdc0c3832c6d4e31d2bf1bbf.jpg" alt="Hotdog Meal">
+        <h3>Hotdog Meal</h3>
+        <p class="price">₱80</p>
+        <button class="btn" onclick="add('Hotdog Meal',80)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+        <img src="https://i.pinimg.com/736x/9d/ea/40/9dea403b069c79e5ea93c33ef14c89cd.jpg" alt="Chicken Rice Meal">
+        <h3>Chicken Rice Meal</h3>
+        <p class="price">₱99</p>
+        <button class="btn" onclick="add('Chicken Rice Meal',99)">Add to Cart</button>
+    </div>
+
+</div>
+
+<!-- CART BUTTON -->
+<button onclick="openCart()" style="position:fixed;bottom:20px;right:20px;background:#111;color:#fff;border:none;padding:12px;border-radius:50px;cursor:pointer;z-index:1000;">
+🛒
+</button>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<div class="cart" id="cart">
+    <h2>🛒 Cart</h2>
+    <div id="cartItems"></div>
+    <div class="total" id="total">Total: ₱0</div>
+
+    <a href="checkout.html">
+        <button class="btn" style="width:100%;margin-top:10px;">Checkout</button>
+    </a>
+</div>
+
+<script>
+function getCart(){
+    return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+function saveCart(cart){
+    localStorage.setItem("cart",JSON.stringify(cart));
+}
+
+function add(name,price){
+    let cart = getCart();
+    let item = cart.find(i => i.name === name);
+
+    if(item) item.qty++;
+    else cart.push({name,price,qty:1});
+
+    saveCart(cart);
+    render();
+    openCart();
+}
+
+function minus(name){
+    let cart = getCart();
+    let item = cart.find(i => i.name === name);
+
+    if(item){
+        item.qty--;
+        if(item.qty <= 0){
+            cart = cart.filter(i => i.name !== name);
+        }
+    }
+
+    saveCart(cart);
+    render();
+}
+
+function render(){
+    let cart = getCart();
+    let box = document.getElementById("cartItems");
+    let total = 0;
+
+    box.innerHTML = "";
+
+    cart.forEach(item=>{
+        total += item.price * item.qty;
+
+        box.innerHTML += `
+        <div class="item">
+            <div>
+                <b>${item.name}</b><br>
+                ₱${item.price}
+            </div>
+
+            <div class="qty">
+                <button onclick="minus('${item.name}')">-</button>
+                <span>${item.qty}</span>
+                <button onclick="add('${item.name}',${item.price})">+</button>
+            </div>
+        </div>`;
+    });
+
+    document.getElementById("total").innerText = "Total: ₱" + total;
+}
+
+function openCart(){
+    document.getElementById("cart").classList.add("active");
+    document.getElementById("overlay").classList.add("active");
+    render();
+}
+
+function closeCart(){
+    document.getElementById("cart").classList.remove("active");
+    document.getElementById("overlay").classList.remove("active");
+}
+
+render();
+</script>
+
+</body>
+</html>
